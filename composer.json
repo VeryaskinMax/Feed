@@ -1,0 +1,15 @@
+{
+    "name": "vmax/feed",
+    "authors": [
+        {
+            "name": "VeryaskinMax",
+            "email": "max@veryaskin.ru"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "vmax\\": "Feed/"
+        }
+    }
+}
