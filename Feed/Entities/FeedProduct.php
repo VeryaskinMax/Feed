@@ -69,7 +69,7 @@ class FeedProduct implements FeedEntityInterface
 
     public function __construct(array $product)
     {
-        $this->setId((int)$product['PRODUCT_ID'] ?: 0);
+        $this->setId((int)$product['PRODUCT_ID']);
         $this->setName($product['NAME'] ?: '');
         $this->setArt((int)$product['ART']);
         $this->setPrice((int)$product['PRICE']);
