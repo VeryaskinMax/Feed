@@ -6,7 +6,7 @@ use vmax\Feed\Config\FeedConfig;
 use vmax\Feed\Entities\FeedCategory;
 use vmax\Feed\Entities\FeedProduct;
 use vmax\Feed\Feeds\AbstractFeed;
-use vmax\Location\Location;
+use Location\Location;
 
 class YandexMarket extends AbstractFeed
 {
