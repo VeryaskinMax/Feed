@@ -16,18 +16,18 @@ class XmlBuilderProvider implements XmlBuilderProviderInterface
     private $result;
 
     /**
-     * @param      $tag_name
-     * @param null $tag_id
+     * @param      $tagName
+     * @param null $tagId
      *
      * @return $this
      * Метод добавляет новый тег в конструктор
      */
-    public function newTag($tag_name, $tag_id = null): self
+    public function newTag($tagName, $tagId = null): self
     {
-        $tag_id = $tag_id ?: 0;
-        $this->xmlNode[$tag_id]['TAG'] = $tag_name;
-        $this->xmlNode[$tag_id]['VALUE'] = '';
-        $this->lastOpenedTagId = $tag_id;
+        $tagId = $tagId ?: 0;
+        $this->xmlNode[$tagId]['TAG'] = $tagName;
+        $this->xmlNode[$tagId]['VALUE'] = '';
+        $this->lastOpenedTagId = $tagId;
 
         return $this;
     }
@@ -152,17 +152,17 @@ class XmlBuilderProvider implements XmlBuilderProviderInterface
     }
 
     /**
-     * @param       $tag_id
+     * @param       $tagId
      * @param array $arAttributes
      *
      * @return $this
      * Метод модифицирует атрибуты текущего тега
      */
-    public function modifyTagAttributes($tag_id, $arAttributes = []): self
+    public function modifyTagAttributes($tagId, $arAttributes = []): self
     {
 
         foreach ($arAttributes as $name => $value) {
-            $this->xmlNode[$tag_id]['ATTRIBUTES'][$name] = $value;
+            $this->xmlNode[$tagId]['ATTRIBUTES'][$name] = $value;
         }
 
         return $this;
@@ -172,7 +172,7 @@ class XmlBuilderProvider implements XmlBuilderProviderInterface
      * @param array $arSubTag
      *
      * @return $this
-     * Метод добавляет вложенный тег текущему тегу
+     * add sub tag into current tag
      * addSubTag([
      * 'TAG' => 'tagname',
      * 'SINGLE' => true,
