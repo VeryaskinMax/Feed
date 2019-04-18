@@ -1,8 +1,6 @@
 <?php
 
-
 namespace vmax\Feed\DataCollectors\Bitrix;
-
 
 use Bitrix\Main\Entity\DataManager;
 use Bitrix\Main\Entity\Field;
