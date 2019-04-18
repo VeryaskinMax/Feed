@@ -72,7 +72,7 @@ class YandexMarketXmlBuilder implements DataBuilderInterface
                 ]);
 
             $vendor = $product->getVendor();
-            $model = $product->getVendor();
+            $model = $product->getModel();
             if (empty($vendor) || empty($model)) {
                 $this->builder->addSubTag(['TAG' => 'name', 'VALUE' => $product->getName()]);
                 $type = '';
@@ -94,9 +94,9 @@ class YandexMarketXmlBuilder implements DataBuilderInterface
 
             $this->builder->modifyTagAttributes('offer_' . $art, ['type' => $type]);
 
-            $this->builder->addSubTag(['TAG' => 'model', 'VALUE' => $product->getUrl()]);
+            $this->builder->addSubTag(['TAG' => 'url', 'VALUE' => $product->getUrl()]);
             $this->builder->addSubTag(['TAG' => 'price', 'VALUE' => $product->getPrice()]);
-            $this->builder->addSubTag(['TAG' => 'currencyId', 'VALUE' => $product->getPrice()]);
+            $this->builder->addSubTag(['TAG' => 'currencyId', 'VALUE' => $product->getCurrency()]);
             $this->builder->addSubTag(['TAG' => 'categoryId', 'VALUE' => $product->getFeedCategoryId()]);
             $this->builder->addSubTag(['TAG' => 'picture', 'VALUE' => $product->getPicture()]);
 
@@ -108,7 +108,7 @@ class YandexMarketXmlBuilder implements DataBuilderInterface
             }
 
             $this->builder->addSubTag(['TAG' => 'delivery', 'VALUE' => $product->getDelivery()]);
-            $this->builder->addSubTag(['TAG' => 'description', 'VALUE' => $product->getDelivery()]);
+            $this->builder->addSubTag(['TAG' => 'description', 'VALUE' => $product->getDescription()]);
             $this->builder->addSubTag([
                 'TAG' => 'manufacturer_warranty',
                 'VALUE' => $product->getManufacturerWarranty(),
@@ -148,7 +148,6 @@ class YandexMarketXmlBuilder implements DataBuilderInterface
         }
 
         $this->result = $this->builder->build();
-
     }
 
 
@@ -161,9 +160,6 @@ class YandexMarketXmlBuilder implements DataBuilderInterface
         $this->result = $this->builder->build();
     }
 
-    /**
-     * @param array $categories
-     */
     private function buildCategoriesTags(array $categories)
     {
         /** @var FeedCategory $category */

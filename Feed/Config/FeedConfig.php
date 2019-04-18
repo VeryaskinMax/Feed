@@ -1,38 +1,27 @@
 <?php
 
-namespace vmax\Feed;
+namespace vmax\Feed\Config;
 
 use vmax\Feed\Interfaces\FeedConfigInterface;
 
-class FeedConfig implements FeedConfigInterface
+abstract class FeedConfig implements FeedConfigInterface
 {
-    const PARAM_CATEGORIES = 'categories';
-    const PARAM_HOSTNAME = 'hostname';
 
-    private $hostName = "https://santehnika-online.ru";
-
+    /** @var string  */
+    protected $hostName = "https://santehnika-online.ru";
 
     /**
-     * @param string $param
-     *
-     * @return array|bool|string
+     * @return string
      */
-    public function get(string $param)
+    public function getHostName(): string
     {
-        switch ($param) {
-            case self::PARAM_CATEGORIES:
-                return $this->getCategories();
-            case self::PARAM_HOSTNAME:
-                return $this->hostName;
-            default:
-                return false;
-        }
+        return $this->hostName;
     }
 
     /**
      * @return array
      */
-    private function getCategories(): array
+    public function getCategories(): array
     {
         return [
             [
@@ -50,17 +39,17 @@ class FeedConfig implements FeedConfigInterface
                         'REAL_ID' => 4694,
                         'PARENT_ID' => 2,
                         'NAME' => 'Акриловые ванны',
-                        'GPC' => 1636,
+                        'GPC' => 1636
                     ],
                     [
                         'ID' => 4,
                         'REAL_ID' => 4914,
                         'PARENT_ID' => 2,
                         'NAME' => 'Чугунные ванны',
-                        'GPC' => 1636,
+                        'GPC' => 1636
                     ],
-                ],
-            ],
+                ]
+            ]
         ];
     }
 }

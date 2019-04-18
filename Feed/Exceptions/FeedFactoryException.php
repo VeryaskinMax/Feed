@@ -2,9 +2,7 @@
 
 namespace vmax\Feed\Exceptions;
 
-use Exception;
-
-class FeedFactoryException extends Exception
+class FeedFactoryException extends FeedException
 {
 
 }

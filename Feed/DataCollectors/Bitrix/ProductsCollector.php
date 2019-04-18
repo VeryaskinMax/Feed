@@ -1,6 +1,8 @@
 <?php
 
+
 namespace vmax\Feed\DataCollectors\Bitrix;
+
 
 use Bitrix\Main\Entity\DataManager;
 use Bitrix\Main\Entity\Field;
@@ -9,13 +11,13 @@ use vmax\Feed\Interfaces\DataCollectorInterface;
 
 class ProductsCollector implements DataCollectorInterface
 {
-    /** @var int */
+    /** @var int  */
     private $productsPerStep = 1000;
     /** @var Query */
     private $queryBuilder;
-    /** @var DataManager */
+    /** @var DataManager  */
     private $dbModelObject;
-    /** @var array */
+    /** @var array  */
     private $tableFields = [];
 
     public function __construct(DataManager $dataBaseTableModel)
@@ -32,7 +34,6 @@ class ProductsCollector implements DataCollectorInterface
     {
         return $this->dbModelObject;
     }
-
     /**
      * @return Query
      */
@@ -40,7 +41,6 @@ class ProductsCollector implements DataCollectorInterface
     {
         return $this->queryBuilder;
     }
-
     /**
      * @param int $productsPerStep
      */
@@ -80,9 +80,7 @@ class ProductsCollector implements DataCollectorInterface
         return $totalSteps;
     }
 
-    /**
-     * @return $this
-     */
+
     private function setTableFields()
     {
         $arFields = $this->dbModelObject::getMap();
@@ -105,9 +103,9 @@ class ProductsCollector implements DataCollectorInterface
         $parameters = [
             'select' => $this->tableFields,
             'filter' => $this->getQueryBuilder()->getFilter(),
-            'limit' => $this->getQueryBuilder()->getLimit(),
+            'limit'  => $this->getQueryBuilder()->getLimit(),
             'offset' => $this->getQueryBuilder()->getOffset(),
-            'order' => $this->getQueryBuilder()->getOrder(),
+            'order'  => $this->getQueryBuilder()->getOrder()
         ];
         $getProducts = $this->getDbModelObject()::getList($parameters);
         $arProducts = [];

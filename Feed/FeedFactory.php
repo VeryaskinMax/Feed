@@ -2,6 +2,7 @@
 
 namespace vmax\Feed;
 
+use vmax\Feed\Config\FeedConfig;
 use vmax\Feed\Exceptions\FeedFactoryException;
 use vmax\Feed\Feeds\Yandex\YandexMarket;
 
@@ -21,18 +22,18 @@ class FeedFactory
     const FEED_EXPERTSENDER = 'expertsender';
 
     /**
-     * @param string $feedName
-     *
-     * @return YandexMarket
+     * @param string     $feedName
+     * @param FeedConfig $config
+
      * @throws FeedFactoryException
      */
-    public static function getFeed(string $feedName)
+    public static function getFeed(string $feedName, FeedConfig $config)
     {
-        switch ($feedName) {
+        switch ($feedName){
             case self::FEED_YANDEX_MARKET:
-                return new YandexMarket();
+                return new YandexMarket($config);
             default:
-                throw new FeedFactoryException(sprintf("Feed \"%s\" not found", $feedName));
+               throw new FeedFactoryException(sprintf("Feed \"%s\" not found", $feedName));
         }
     }
 }

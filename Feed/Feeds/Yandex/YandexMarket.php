@@ -2,9 +2,9 @@
 
 namespace vmax\Feed\Feeds\Yandex;
 
+use vmax\Feed\Config\FeedConfig;
 use vmax\Feed\Entities\FeedCategory;
 use vmax\Feed\Entities\FeedProduct;
-use vmax\Feed\Exceptions\FeedEntityException;
 use vmax\Feed\Feeds\AbstractFeed;
 use vmax\Location\Location;
 
@@ -23,56 +23,43 @@ class YandexMarket extends AbstractFeed
         'BRAND',
     ];
 
-    protected $defaultRegionId = 2097;
-    protected $maxAdditionalImages = 9;
-    protected $deliveryDaysRange = [];
-    protected $deliveryRequest = ['product' => [1631099]];
+    /** @var string */
+    private $host;
+    /** @var string */
+    private $urlParams;
+    /** @var int  */
+    private $maxAdditionalImages = 9;
+    /** @var array  */
+    private $deliveryDaysRange = [];
+    /** @var array  */
+    private $deliveryRequest = ['product' => [1631099]];
+    /** @var FeedConfig  */
+    private $config;
 
-    public function __construct()
+    public function __construct(FeedConfig $config)
     {
+        $this->config = $config;
+        $this->host = $this->config->getHostName();
+        $params = $this->config->getUrlParams();
+        $this->urlParams = http_build_query($params, '', '&amp;', PHP_QUERY_RFC3986);
+
         $this->setDeliveryDays();
     }
 
     /**
-     * @return string
-     */
-    public function getHeader(): string
-    {
-        return "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n" .
-            "<!DOCTYPE yml_catalog SYSTEM \"shops.dtd\">\n" .
-            "<yml_catalog date=\"" . date("Y-m-d H:i:s") . "\">\n" .
-            "<shop>\n";
-    }
-
-    public function getFooter(): string
-    {
-        return "</shop></yml_catalog>";
-    }
-
-
-    /**
-     * @return int
-     */
-    public function getDefaultRegionId(): int
-    {
-        return $this->defaultRegionId;
-    }
-
-    /**
      * @return array
-     * @throws \Exception
      */
-    public function getDeliveryDays()
+    public function getDeliveryDays(): array
     {
         return $this->deliveryDaysRange;
     }
 
-    public function setDeliveryDays($locationId = null)
+    private function setDeliveryDays()
     {
-        $location = new Location($locationId ?: $this->getDefaultRegionId());
-        $response_delivery_days = $location->getBasketDeliveryPrice(false, false, $this->deliveryRequest);
+        $location = new Location($this->config->getRegionId());
+        $responseDeliveryDays = $location->getBasketDeliveryPrice(false, false, $this->deliveryRequest);
 
-        $getDeliveryDaysRange = $response_delivery_days['calc']['deliveryProduct']['data']['SANTON_DELIVERY']['days'];
+        $getDeliveryDaysRange = $responseDeliveryDays['calc']['deliveryProduct']['data']['SANTON_DELIVERY']['days'];
 
         $dateCurrent = new \DateTime(date('Y-m-d H:i:s'));
         $dateTo = new \DateTime(date('Y-m-d H:i:s', $getDeliveryDaysRange['to']));
@@ -84,12 +71,18 @@ class YandexMarket extends AbstractFeed
     public function prepareProducts(array $data)
     {
         $this->data = [];
+        $configHost = $this->config->getHostName();
         foreach ($data as &$product) {
             $properties = unserialize($product['PARAMS']);
             $delivery = unserialize($product['DELIVERY_PRICE']);
-            $defaultRegionId = $this->getDefaultRegionId();
-            $deliveryPrice = $delivery[$defaultRegionId];
+            $regionId = $this->config->getRegionId();
+            $deliveryPrice = $delivery[$regionId];
 
+            $product['URL'] .= "?" . $this->urlParams . '&amp;utm_term='.$product['ART'];
+            $urlHost = parse_url($product['URL'])['host'];
+            if ($urlHost !== $configHost) {
+                $product['URL'] = str_replace($urlHost, $configHost, $product['URL']);
+            }
             if (!empty($product['ADDITIONAL_IMAGES'])) {
                 $additionalImages = [];
                 if (strpos($product['ADDITIONAL_IMAGES'], ';') !== false) {
@@ -163,14 +156,18 @@ class YandexMarket extends AbstractFeed
     /**
      * @param array $data
      *
-     * @throws FeedEntityException
      */
     public function prepareCategories(array $data)
     {
-        $this->data = $this->collectCategoriesData($data);
+        $this->data = $this->doPrepareCategoriesData($data);
     }
 
-    private function collectCategoriesData(array $categories)
+    /**
+     * @param array $categories
+     *
+     * @return array
+     */
+    private function doPrepareCategoriesData(array $categories)
     {
         $result = [];
         foreach ($categories as $category) {
@@ -178,7 +175,7 @@ class YandexMarket extends AbstractFeed
             /** @var  */
             if (!empty($category['CHILDREN'])) {
                 /** @var array $children */
-                $children = $this->collectCategoriesData($category['CHILDREN']);
+                $children = $this->doPrepareCategoriesData($category['CHILDREN']);
                 $obCategory->setChildren($children);
             }
             $result[] = $obCategory;
