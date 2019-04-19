@@ -16,7 +16,7 @@ abstract class AbstractFeed implements FeedInterface
      */
     public function switchEntity(string $feedEntity)
     {
-        $this->data = []; // чищаем данные для работы с новой сущностью
+        $this->data = []; // clear data for new entity
         $this->feedEntity = $feedEntity;
     }
 

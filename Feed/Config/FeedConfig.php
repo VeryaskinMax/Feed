@@ -8,7 +8,7 @@ abstract class FeedConfig implements FeedConfigInterface
 {
 
     /** @var string  */
-    protected $hostName = "https://santehnika-online.ru";
+    protected $hostName = "https://somesite.com";
 
     /**
      * @return string
