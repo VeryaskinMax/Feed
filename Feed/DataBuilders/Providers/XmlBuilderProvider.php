@@ -1,33 +1,34 @@
 <?php
 
-namespace vmax\Feed\DataBuilders\Providers;
 
-use vmax\Feed\Interfaces\XmlBuilderProviderInterface;
+namespace santon\Feed\DataBuilders\Providers;
+
+use santon\Feed\Interfaces\XmlBuilderProviderInterface;
 
 class XmlBuilderProvider implements XmlBuilderProviderInterface
 {
 
-    /** @var array */
+    /** @var array  */
     public $xmlNode = [];
-    /** @var mixed */
+    /** @var mixed  */
     public $lastOpenedTagId = false;
 
     /** @var string */
     private $result;
 
     /**
-     * @param      $tagName
-     * @param null $tagId
+     * @param      $tag_name
+     * @param null $tag_id
      *
      * @return $this
      * Метод добавляет новый тег в конструктор
      */
-    public function newTag($tagName, $tagId = null): self
+    public function newTag($tag_name, $tag_id = null): self
     {
-        $tagId = $tagId ?: 0;
-        $this->xmlNode[$tagId]['TAG'] = $tagName;
-        $this->xmlNode[$tagId]['VALUE'] = '';
-        $this->lastOpenedTagId = $tagId;
+        $tag_id = $tag_id ?: 0;
+        $this->xmlNode[$tag_id]['TAG'] = $tag_name;
+        $this->xmlNode[$tag_id]['VALUE'] = '';
+        $this->lastOpenedTagId = $tag_id;
 
         return $this;
     }
@@ -53,7 +54,7 @@ class XmlBuilderProvider implements XmlBuilderProviderInterface
      */
     public function setValue($tag_value): self
     {
-        $this->xmlNode[$this->lastOpenedTagId]['VALUE'] = !empty($tag_value) ? $tag_value : '';
+        $this->xmlNode[$this->lastOpenedTagId]['VALUE'] = (!empty($tag_value)) ? $tag_value : '';
 
         return $this;
     }
@@ -99,8 +100,10 @@ class XmlBuilderProvider implements XmlBuilderProviderInterface
                 }
             }
 
+
             if (!empty($arTag['SUB_TAGS'])) {
                 $this->result .= "\n";
+
 
                 foreach ($arTag['SUB_TAGS'] as &$arSubNode) {
                     $this->buildNode($arSubNode);
@@ -152,17 +155,17 @@ class XmlBuilderProvider implements XmlBuilderProviderInterface
     }
 
     /**
-     * @param       $tagId
+     * @param       $tag_id
      * @param array $arAttributes
      *
      * @return $this
      * Метод модифицирует атрибуты текущего тега
      */
-    public function modifyTagAttributes($tagId, $arAttributes = []): self
+    public function modifyTagAttributes($tag_id, $arAttributes = []): self
     {
 
         foreach ($arAttributes as $name => $value) {
-            $this->xmlNode[$tagId]['ATTRIBUTES'][$name] = $value;
+            $this->xmlNode[$tag_id]['ATTRIBUTES'][$name] = $value;
         }
 
         return $this;
@@ -172,7 +175,7 @@ class XmlBuilderProvider implements XmlBuilderProviderInterface
      * @param array $arSubTag
      *
      * @return $this
-     * add sub tag into current tag
+     * Метод добавляет вложенный тег текущему тегу
      * addSubTag([
      * 'TAG' => 'tagname',
      * 'SINGLE' => true,

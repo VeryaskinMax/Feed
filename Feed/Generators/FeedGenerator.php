@@ -1,12 +1,11 @@
 <?php
 
-namespace vmax\Feed\Generators;
+namespace santon\Feed\Generators;
 
-use vmax\Feed\Interfaces\FeedGeneratorInterface;
+use santon\Feed\Interfaces\FeedGeneratorInterface;
 
-class XmlFeedGenerator implements FeedGeneratorInterface
+class FeedGenerator implements FeedGeneratorInterface
 {
-
     /** @var string */
     private $outputFile;
 
@@ -16,10 +15,7 @@ class XmlFeedGenerator implements FeedGeneratorInterface
         $this->start();
     }
 
-    /**
-     * begins creating feed file
-     */
-    public function start()
+    private function start()
     {
         $feedDirname = dirname($this->outputFile);
         if (!is_dir($feedDirname)) {
@@ -33,38 +29,26 @@ class XmlFeedGenerator implements FeedGeneratorInterface
         }
     }
 
-    /**
-     * finish up creating feed file
-     */
     public function finish()
     {
         $this->createBackup();
         $this->createFeed();
     }
 
-    /**
-     * creates backup
-     */
-    public function createBackup()
+    private function createBackup()
     {
         if (file_exists($this->outputFile)) {
             rename($this->outputFile, $this->outputFile . '_old');
         }
     }
 
-    /**
-     * creates feed
-     */
-    public function createFeed()
+    private function createFeed()
     {
         if (file_exists($this->outputFile . '.tmp')) {
             rename($this->outputFile . '.tmp', $this->outputFile);
         }
     }
 
-    /**
-     * @param string $data
-     */
     public function writeToFile(string $data)
     {
         if (!empty($data)) {

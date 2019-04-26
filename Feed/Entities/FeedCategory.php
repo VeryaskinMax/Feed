@@ -1,8 +1,8 @@
 <?php
 
-namespace vmax\Feed\Entities;
+namespace santon\Feed\Entities;
 
-use vmax\Feed\Interfaces\FeedEntityInterface;
+use santon\Feed\Interfaces\FeedEntityInterface;
 
 class FeedCategory implements FeedEntityInterface
 {
@@ -25,12 +25,12 @@ class FeedCategory implements FeedEntityInterface
 
     public function __construct(array $category)
     {
-        $this->setFeedId((int)$category['ID']);
-        $this->setParentId((int)$category['PARENT_ID']);
-        $this->setRealId((int)$category['REAL_ID']);
+        $this->setFeedId($category['ID'] ?: 0);
+        $this->setParentId($category['PARENT_ID'] ?: 0);
+        $this->setRealId($category['REAL_ID'] ?: 0);
         $this->setName($category['NAME'] ?: '');
         $this->setCode($category['CODE'] ?: '');
-        $this->setGpc((int)$category['GPC']);
+        $this->setGpc($category['GPC'] ?: 0);
         $this->setChildren($category['CHILDREN'] ?: []);
     }
 

@@ -1,18 +1,18 @@
 <?php
 
-namespace vmax\Feed\DataBuilders\Xml;
+namespace santon\Feed\DataBuilders\Xml;
 
-use vmax\Feed\Entities\FeedCategory;
-use vmax\Feed\Entities\FeedProduct;
-use vmax\Feed\Exceptions\FeedEntityException;
-use vmax\Feed\Exceptions\FeedXmlBuilderException;
-use vmax\Feed\Interfaces\DataBuilderInterface;
-use vmax\Feed\Interfaces\FeedInterface;
-use vmax\Feed\Interfaces\XmlBuilderProviderInterface;
+use santon\Feed\Entities\FeedCategory;
+use santon\Feed\Entities\FeedProductYandex;
+use santon\Feed\Exceptions\FeedEntityException;
+use santon\Feed\Exceptions\FeedXmlBuilderException;
+use santon\Feed\Interfaces\DataBuilderInterface;
+use santon\Feed\Interfaces\FeedInterface;
+use santon\Feed\Interfaces\XmlBuilderProviderInterface;
 
 class YandexMarketXmlBuilder implements DataBuilderInterface
 {
-    const BUILD_TYPE_PRODUCT = 'product';
+    const BUILD_TYPE_PRODUCT = 'productYandex';
     const BUILD_TYPE_CATEGORY = 'category';
 
     /** @var XmlBuilderProviderInterface */
@@ -28,7 +28,7 @@ class YandexMarketXmlBuilder implements DataBuilderInterface
     /**
      * @param FeedInterface $feed
      *
-     * @return YandexMarketXmlBuilder
+     * @return $this
      * @throws FeedEntityException
      * @throws FeedXmlBuilderException
      */
@@ -61,7 +61,7 @@ class YandexMarketXmlBuilder implements DataBuilderInterface
      */
     private function buildProducts(array $products)
     {
-        /** @var FeedProduct $product */
+        /** @var FeedProductYandex $product */
         foreach ($products as $product) {
             $art = $product->getArt();
             $this->builder->newTag('offer', 'offer_' . $art)
@@ -164,11 +164,11 @@ class YandexMarketXmlBuilder implements DataBuilderInterface
     {
         /** @var FeedCategory $category */
         foreach ($categories as $category) {
-            $categoryId = $category->getRealId();
+            $categoryId = $category->getId();
             $this->builder->newTag('category', 'category_' . $categoryId)
                 ->setValue($category->getName())
                 ->setAttributes([
-                    'id' => $category->getId(),
+                    'id' => $categoryId,
                     'parentId' => $category->getParentId(),
                 ]);
 

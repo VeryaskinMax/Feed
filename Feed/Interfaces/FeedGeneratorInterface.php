@@ -1,6 +1,6 @@
 <?php
 
-namespace vmax\Feed\Interfaces;
+namespace santon\Feed\Interfaces;
 
 interface FeedGeneratorInterface
 {

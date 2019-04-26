@@ -1,6 +1,6 @@
 <?php
 
-namespace vmax\Feed\Exceptions;
+namespace santon\Feed\Exceptions;
 
 class FeedXmlBuilderException extends FeedException
 {

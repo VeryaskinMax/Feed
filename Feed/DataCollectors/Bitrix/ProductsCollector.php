@@ -1,11 +1,14 @@
 <?php
 
-namespace vmax\Feed\DataCollectors\Bitrix;
+namespace santon\Feed\DataCollectors\Bitrix;
 
-use Bitrix\Main\Entity\DataManager;
-use Bitrix\Main\Entity\Field;
-use Bitrix\Main\Entity\Query;
-use vmax\Feed\Interfaces\DataCollectorInterface;
+use Bitrix\Main\ArgumentException;
+use Bitrix\Main\Entity\{
+    DataManager,
+    Field,
+    Query
+};
+use santon\Feed\Interfaces\DataCollectorInterface;
 
 class ProductsCollector implements DataCollectorInterface
 {
@@ -28,7 +31,7 @@ class ProductsCollector implements DataCollectorInterface
     /**
      * @return DataManager
      */
-    private function getDbModelObject()
+    private function getDbModelObject(): DataManager
     {
         return $this->dbModelObject;
     }
@@ -78,8 +81,10 @@ class ProductsCollector implements DataCollectorInterface
         return $totalSteps;
     }
 
-
-    private function setTableFields()
+    /**
+     * @return $this
+     */
+    private function setTableFields(): self
     {
         $arFields = $this->dbModelObject::getMap();
         if ($arFields) {
@@ -94,7 +99,7 @@ class ProductsCollector implements DataCollectorInterface
 
     /**
      * @return array
-     * @throws \Bitrix\Main\ArgumentException
+     * @throws ArgumentException
      */
     public function getCollection(): array
     {

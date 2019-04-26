@@ -1,12 +1,12 @@
 <?php
 
-namespace vmax\Feed\Entities;
+namespace santon\Feed\Entities;
 
-use vmax\Feed\Interfaces\FeedEntityInterface;
+use santon\Feed\Interfaces\FeedEntityInterface;
 
-class FeedProduct implements FeedEntityInterface
+class FeedProductYandex implements FeedEntityInterface
 {
-    const ENTITY_TYPE = 'product';
+    const ENTITY_TYPE = 'productYandex';
 
     /** @var int */
     private $id;
@@ -32,8 +32,6 @@ class FeedProduct implements FeedEntityInterface
     private $currency;
     /** @var int */
     private $feedCategoryId;
-    /** @var int */
-    private $feedDigineticaCategoryId;
     /** @var string */
     private $picture;
     /** @var string */
@@ -50,26 +48,12 @@ class FeedProduct implements FeedEntityInterface
     private $salesNotes;
     /** @var array */
     private $params = [];
-    /** @var int */
-    private $googleProductCategory;
-    /** @var string */
-    private $adwordsGrouping;
     /** @var array */
     private $additionalImages = [];
-    /** @var string */
-    private $gtin;
-    /** @var string */
-    private $mpn;
-    /** @var int */
-    private $inFeedYandex;
-    /** @var int */
-    private $inFeedGoogle;
-    /** @var int */
-    private $inFeedK50;
 
     public function __construct(array $product)
     {
-        $this->setId((int)$product['PRODUCT_ID']);
+        $this->setId((int)$product['PRODUCT_ID'] ?: 0);
         $this->setName($product['NAME'] ?: '');
         $this->setArt((int)$product['ART']);
         $this->setPrice((int)$product['PRICE']);
@@ -81,21 +65,13 @@ class FeedProduct implements FeedEntityInterface
         $this->setSalesNotes($product['SALES_NOTES'] ?: '');
         $this->setActive((int)$product['ACTIVE_PRODUCT']);
         $this->setAdditionalImages($product['ADDITIONAL_IMAGES'] ?: []);
-        $this->setAdwordsGrouping($product['ADWORDS_GROUPING'] ?: '');
         $this->setCountry($product['COUNTRY_OF_ORIGIN'] ?: '');
         $this->setCurrency($product['CURRENCY'] ?: '');
         $this->setDelivery($product['DELIVERY'] ?: 'FALSE');
         $this->setDeliveryPrice($product['DELIVERY_PRICE'] ?: []);
         $this->setDescription($product['DESCRIPTION'] ?: '');
         $this->setFeedCategoryId((int)$product['FEED_CATEGORY_ID']);
-        $this->setFeedDigineticaCategoryId((int)$product['FEED_DIGINETICA_CATEGORY_ID']);
-        $this->setGoogleProductCategory((int)$product['GOOGLE_CATEGORY_ID']);
-        $this->setGtin($product['GTIN'] ?: '');
         $this->setModel($product['MODEL'] ?: '');
-        $this->setMpn($product['MPN'] ?: '');
-        $this->setInFeedGoogle((int)$product['IN_FEED_GOOGLE']);
-        $this->setInFeedYandex((int)$product['IN_FEED_YANDEX']);
-        $this->setInFeedK50((int)$product['IN_FEED_K50']);
         $this->setManufacturerWarranty($product['MANUFACTURER_WARRANTY'] ?: 'false');
         $this->setParams($product['PARAMS'] ?: []);
     }
@@ -293,22 +269,6 @@ class FeedProduct implements FeedEntityInterface
     }
 
     /**
-     * @return int
-     */
-    public function getFeedDigineticaCategoryId(): int
-    {
-        return $this->feedDigineticaCategoryId;
-    }
-
-    /**
-     * @param int $feedDigineticaCategoryId
-     */
-    public function setFeedDigineticaCategoryId(int $feedDigineticaCategoryId)
-    {
-        $this->feedDigineticaCategoryId = $feedDigineticaCategoryId;
-    }
-
-    /**
      * @return string
      */
     public function getPicture(): string
@@ -437,38 +397,6 @@ class FeedProduct implements FeedEntityInterface
     }
 
     /**
-     * @return int
-     */
-    public function getGoogleProductCategory(): int
-    {
-        return $this->googleProductCategory;
-    }
-
-    /**
-     * @param int $googleProductCategory
-     */
-    public function setGoogleProductCategory(int $googleProductCategory)
-    {
-        $this->googleProductCategory = $googleProductCategory;
-    }
-
-    /**
-     * @return string
-     */
-    public function getAdwordsGrouping(): string
-    {
-        return $this->adwordsGrouping;
-    }
-
-    /**
-     * @param string $adwordsGrouping
-     */
-    public function setAdwordsGrouping(string $adwordsGrouping)
-    {
-        $this->adwordsGrouping = $adwordsGrouping;
-    }
-
-    /**
      * @return array
      */
     public function getAdditionalImages(): array
@@ -482,86 +410,6 @@ class FeedProduct implements FeedEntityInterface
     public function setAdditionalImages(array $additionalImages)
     {
         $this->additionalImages = $additionalImages;
-    }
-
-    /**
-     * @return string
-     */
-    public function getGtin(): string
-    {
-        return $this->gtin;
-    }
-
-    /**
-     * @param string $gtin
-     */
-    public function setGtin(string $gtin)
-    {
-        $this->gtin = $gtin;
-    }
-
-    /**
-     * @return string
-     */
-    public function getMpn(): string
-    {
-        return $this->mpn;
-    }
-
-    /**
-     * @param string $mpn
-     */
-    public function setMpn(string $mpn)
-    {
-        $this->mpn = $mpn;
-    }
-
-    /**
-     * @return int
-     */
-    public function getInFeedYandex(): int
-    {
-        return $this->inFeedYandex;
-    }
-
-    /**
-     * @param int $inFeedYandex
-     */
-    public function setInFeedYandex(int $inFeedYandex)
-    {
-        $this->inFeedYandex = $inFeedYandex;
-    }
-
-    /**
-     * @return int
-     */
-    public function getInFeedGoogle(): int
-    {
-        return $this->inFeedGoogle;
-    }
-
-    /**
-     * @param int $inFeedGoogle
-     */
-    public function setInFeedGoogle(int $inFeedGoogle)
-    {
-        $this->inFeedGoogle = $inFeedGoogle;
-    }
-
-    /**
-     * @return int
-     */
-    public function getInFeedK50(): int
-    {
-        return $this->inFeedK50;
-    }
-
-    /**
-     * @param int $inFeedK50
-     */
-    public function setInFeedK50(int $inFeedK50)
-    {
-        $this->inFeedK50 = $inFeedK50;
     }
 
     /**
